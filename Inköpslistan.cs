@@ -15,8 +15,8 @@ while (true)
     Console.WriteLine();
     PrintList(names, prices);
     Console.WriteLine();
-    Console.Write("Skriv ett varunamn för att lägga till (tomt = avsluta): ");
-    string input = Console.ReadLine();
+    Console.Write("Skriv ett varunamn för att lägga till, ett nummer för att ta bort (tomt = avsluta): ");
+    string? input = Console.ReadLine();
 
     if (string.IsNullOrWhiteSpace(input))
     {
@@ -25,23 +25,40 @@ while (true)
 
     input = input.Trim();
 
-    // Fråga efter priset om det inte ett heltal läggs varan inte till.
-
-    Console.Write("Pris: ");
-
-    if (int.TryParse(Console.ReadLine(), out int price))
+    if (int.TryParse(input, out int number))
     {
-        names.Add(input);
-        prices.Add(price);
-        Console.WriteLine("Varan lades till.");
+        // Ett nummer tar bort varan på den positionen både namn och pris
+        if (number < 1 || number > names.Count)
+        {
+            Console.WriteLine($"Det finns ingen vara med nummer {number}.");
+        }
+        else
+        {
+            names.RemoveAt(number - 1);
+            prices.RemoveAt(number - 1);
+            Console.WriteLine("Varan togs bort.");
+        }
     }
     else
     {
-        Console.WriteLine("Priset måste vara ett heltal. Varan lades inte till.");
+        // Annars är det ett varunamn som fråga efter priset
+
+        Console.Write("Pris: ");
+
+        if (int.TryParse(Console.ReadLine(), out int price))
+        {
+            names.Add(input);
+            prices.Add(price);
+            Console.WriteLine("Varan lades till.");
+        }
+        else
+        {
+            Console.WriteLine("Priset måste vara ett heltal. Varan lades inte till.");
+        }
     }
 }
 
-// Skriver ut listan numrerad 1, 2, 3 följt av totalsumman.
+// Skriver ut listan numrerad 1, 2, 3 följt av totalsumman
 
 void PrintList(List<string> itemNames, List<int> itemPrices)
 {
